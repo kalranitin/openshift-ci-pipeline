@@ -11,7 +11,7 @@ COPY docker.repo /etc/yum.repos.d/docker.repo
 
 RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release && \
     rpmkeys --import file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 && \
-    yum install -y --setopt=tsflags=nodocs install wget nss_wrapper docker-engine && \
+    yum install -y --setopt=tsflags=nodocs install service wget nss_wrapper docker-engine && \
     yum clean all && \
     mkdir -p /opt/app-root/jenkins && \
     chown -R 1001:0 /opt/app-root/jenkins && \
@@ -44,7 +44,8 @@ ENV PATH=${MAVEN_HOME}/bin:$PATH
 # Copy the entrypoint
 COPY contrib/openshift/* /opt/app-root/jenkins/
 RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
-USER 1001
+
+#USER 1001
 #VOLUME /root/.m2
 
 WORKDIR /opt/app-root
