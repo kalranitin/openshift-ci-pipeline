@@ -30,7 +30,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>docker -H 192.168.43.21:2376 login -u kalni03 -p Myru2906! isl-dsdc.ca.com:5000 &amp;&amp; docker -H 192.168.43.21:2376 pull isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-app</command>
+      <command>docker -H 192.168.43.21:2376 login -u  -p  isl-dsdc.ca.com:5000 &amp;&amp; docker -H 192.168.43.21:2376 pull isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-app</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers/>
