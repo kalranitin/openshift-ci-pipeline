@@ -32,7 +32,7 @@ depgraph-view:0.11
 description-column-plugin:1.3
 disk-usage:0.28
 docker-build-step:1.35
-docker-build-publish:1.2.2
+docker-build-publish:1.2.3
 docker-commons:1.4.0
 docker-plugin:0.16.0
 durable-task:1.7
