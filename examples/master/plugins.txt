@@ -34,7 +34,6 @@ disk-usage:0.28
 docker-build-step:1.35
 docker-build-publish:1.2.3
 docker-commons:1.4.0
-docker-plugin:0.16.0
 durable-task:1.7
 dynamic-axis:1.0.3
 dynamicparameter:0.2.0
