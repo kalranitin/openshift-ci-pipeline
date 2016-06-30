@@ -29,10 +29,82 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <hudson.tasks.Shell>
-      <command>docker -H 192.168.43.21:2376 login -u  -p  isl-dsdc.ca.com:5000 &amp;&amp; docker -H 192.168.43.21:2376 pull isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-app</command>
-    </hudson.tasks.Shell>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
+        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
+          <url>http://isl-dsdc.ca.com:5000</url>
+          <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+        </dockerRegistryEndpoint>
+        <fromImage>saas-devops/ose-example/sample-app</fromImage>
+        <tag>latest</tag>
+        <registry>isl-dsdc.ca.com:5000</registry>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
+        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
+          <url>http://isl-dsdc.ca.com:5000</url>
+          <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+        </dockerRegistryEndpoint>
+        <fromImage>saas-devops/ose-example/sample-webapp</fromImage>
+        <tag>latest</tag>
+        <registry>isl-dsdc.ca.com:5000</registry>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.twistlock.builder.BuildScanner plugin="twistlock-jenkins-plugin@1_4_45">
+      <repository>saas-devops/ose-example/sample-webapp</repository>
+      <tag>latest</tag>
+      <policy>alert</policy>
+      <timeout>10</timeout>
+      <logLevel>true</logLevel>
+    </org.jenkinsci.plugins.twistlock.builder.BuildScanner>
   </builders>
-  <publishers/>
+  <publishers>
+    <org.jenkinsci.plugins.twistlock.publisher.Publisher plugin="twistlock-jenkins-plugin@1_4_45">
+      <thresholdLimit>low</thresholdLimit>
+      <pluginName>[TWISTLOCK] </pluginName>
+      <canRunOnFailed>false</canRunOnFailed>
+      <usePreviousBuildAsReference>false</usePreviousBuildAsReference>
+      <useStableBuildAsReference>false</useStableBuildAsReference>
+      <useDeltaValues>false</useDeltaValues>
+      <thresholds plugin="analysis-core@1.75">
+        <unstableTotalAll></unstableTotalAll>
+        <unstableTotalHigh></unstableTotalHigh>
+        <unstableTotalNormal></unstableTotalNormal>
+        <unstableTotalLow></unstableTotalLow>
+        <unstableNewAll></unstableNewAll>
+        <unstableNewHigh></unstableNewHigh>
+        <unstableNewNormal></unstableNewNormal>
+        <unstableNewLow></unstableNewLow>
+        <failedTotalAll></failedTotalAll>
+        <failedTotalHigh></failedTotalHigh>
+        <failedTotalNormal></failedTotalNormal>
+        <failedTotalLow></failedTotalLow>
+        <failedNewAll></failedNewAll>
+        <failedNewHigh></failedNewHigh>
+        <failedNewNormal></failedNewNormal>
+        <failedNewLow></failedNewLow>
+      </thresholds>
+      <shouldDetectModules>false</shouldDetectModules>
+      <dontComputeNew>false</dontComputeNew>
+      <doNotResolveRelativePaths>false</doNotResolveRelativePaths>
+      <repository>saas-devops/ose-example/sample-webapp</repository>
+      <tag>latest</tag>
+      <timeout>5</timeout>
+      <logLevel>true</logLevel>
+    </org.jenkinsci.plugins.twistlock.publisher.Publisher>
+    <hudson.plugins.ws__cleanup.WsCleanup plugin="ws-cleanup@0.28">
+      <deleteDirs>false</deleteDirs>
+      <skipWhenFailed>false</skipWhenFailed>
+      <cleanWhenSuccess>true</cleanWhenSuccess>
+      <cleanWhenUnstable>true</cleanWhenUnstable>
+      <cleanWhenFailure>true</cleanWhenFailure>
+      <cleanWhenNotBuilt>true</cleanWhenNotBuilt>
+      <cleanWhenAborted>true</cleanWhenAborted>
+      <notFailBuild>false</notFailBuild>
+      <cleanupMatrixParent>false</cleanupMatrixParent>
+      <externalDelete></externalDelete>
+    </hudson.plugins.ws__cleanup.WsCleanup>
+  </publishers>
   <buildWrappers/>
 </project>

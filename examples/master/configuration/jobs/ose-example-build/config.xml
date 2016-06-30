@@ -33,7 +33,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <url>https://github-isl-01.ca.com/kalni03/ose-example.git</url>
-        <credentialsId>c17b1fd3-f8a8-4376-84e3-8c2bf4840db6</credentialsId>
+        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -53,13 +53,13 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.2">
+    <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.3">
       <server plugin="docker-commons@1.4.0">
         <uri>tcp://192.168.43.21:2376</uri>
       </server>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>c17b1fd3-f8a8-4376-84e3-8c2bf4840db6</credentialsId>
+        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-app</repoName>
       <noCache>false</noCache>
@@ -68,19 +68,19 @@
       <skipBuild>false</skipBuild>
       <skipDecorate>false</skipDecorate>
       <repoTag>latest</repoTag>
-      <skipPush>true</skipPush>
+      <skipPush>false</skipPush>
       <createFingerprint>true</createFingerprint>
       <skipTagLatest>false</skipTagLatest>
       <buildAdditionalArgs></buildAdditionalArgs>
       <forceTag>true</forceTag>
     </com.cloudbees.dockerpublish.DockerBuilder>
-    <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.2">
+    <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.3">
       <server plugin="docker-commons@1.4.0">
         <uri>tcp://192.168.43.21:2376</uri>
       </server>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>c17b1fd3-f8a8-4376-84e3-8c2bf4840db6</credentialsId>
+        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-webapp</repoName>
       <noCache>false</noCache>
@@ -89,7 +89,7 @@
       <skipBuild>false</skipBuild>
       <skipDecorate>false</skipDecorate>
       <repoTag>latest</repoTag>
-      <skipPush>true</skipPush>
+      <skipPush>false</skipPush>
       <createFingerprint>true</createFingerprint>
       <skipTagLatest>false</skipTagLatest>
       <buildAdditionalArgs></buildAdditionalArgs>
