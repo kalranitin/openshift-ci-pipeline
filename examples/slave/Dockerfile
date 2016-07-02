@@ -20,7 +20,7 @@ RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release 
 
 WORKDIR /tmp
 RUN mkdir -p ${OC_CLI_HOME} && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm" && \
-	curl -fsSL https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz && | tar -xzC ${OC_CLI_HOME} --strip-components=1
+	curl -fsSL https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz | tar -xzC ${OC_CLI_HOME} --strip-components=1
 
 RUN yum -y install /tmp/jdk-8u60-linux-x64.rpm && rm /tmp/jdk-8u60-linux-x64.rpm
 RUN alternatives --install /usr/bin/java java ${java_home}/bin/java 1
