@@ -3,6 +3,7 @@ FROM openshift/base-centos7
 
 ENV MAVEN_VERSION 3.3.9
 ENV java_home /usr/java/jdk1.8.0_60
+ENV OC_CLI_HOME /opt/ose-cli
 
 # Install headless Java
 USER root
@@ -18,7 +19,8 @@ RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release 
     chmod -R g+w /opt/app-root/jenkins
 
 WORKDIR /tmp
-RUN wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm"
+RUN mkdir -p ${OC_CLI_HOME} && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm" && \
+	wget https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz
 
 RUN yum -y install /tmp/jdk-8u60-linux-x64.rpm
 RUN alternatives --install /usr/bin/java java ${java_home}/bin/java 1
@@ -39,7 +41,7 @@ RUN mkdir -p /usr/share/maven \
 
 ENV MAVEN_HOME /usr/share/maven
 
-ENV PATH=${MAVEN_HOME}/bin:$PATH
+ENV PATH=${MAVEN_HOME}/bin:${OC_CLI_HOME}:$PATH
 
 # Copy the entrypoint
 COPY contrib/openshift/* /opt/app-root/jenkins/
