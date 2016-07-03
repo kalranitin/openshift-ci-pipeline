@@ -52,6 +52,7 @@ RUN chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
 
 WORKDIR /opt/app-root
 
+
 # Run the JNLP client by default
 # To use swarm client, specify "/opt/app-root/jenkins/run-swarm-client" as Command
-ENTRYPOINT ["/opt/app-root/jenkins/run-jnlp-client"]
+ENTRYPOINT ["exec /usr/bin/docker daemon -H 0.0.0.0:2376 && /opt/app-root/jenkins/run-jnlp-client"]
