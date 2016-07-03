@@ -7,6 +7,7 @@
 # The directory that Jenkins will execute the builds and store cache files.
 # The directory has to be writeable for the user that the container is running
 # under.
+exec /usr/bin/docker daemon -H 0.0.0.0:2376
 export JENKINS_HOME=/opt/app-root/jenkins
 
 # Setup nss_wrapper so the random user OpenShift will run this container
