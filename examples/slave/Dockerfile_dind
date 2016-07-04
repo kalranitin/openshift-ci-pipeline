@@ -1,0 +1,29 @@
+# The FROM will be replaced when building in OpenShift
+FROM openshift/base-centos7
+
+ENV OC_CLI_HOME /opt/ose-cli
+USER root
+
+COPY docker.repo /etc/yum.repos.d/docker.repo
+
+RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release && \
+    rpmkeys --import file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 && \
+    yum install -y --setopt=tsflags=nodocs install service wget nss_wrapper docker-engine && \
+    yum clean all && \
+    mkdir -p /opt/app-root
+
+WORKDIR /tmp
+RUN mkdir -p ${OC_CLI_HOME} && \
+	curl -fsSL https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz | tar -xzC ${OC_CLI_HOME} --strip-components=1
+
+ENV PATH=${OC_CLI_HOME}:$PATH
+
+# Copy the entrypoint
+#USER 1001
+#VOLUME /root/.m2
+
+WORKDIR /opt/app-root
+
+# Run the JNLP client by default
+# To use swarm client, specify "/opt/app-root/jenkins/run-swarm-client" as Command
+CMD ["exec /usr/bin/docker daemon -H 0.0.0.0:2376"]

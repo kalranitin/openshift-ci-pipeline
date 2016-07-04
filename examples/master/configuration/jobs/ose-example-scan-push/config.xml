@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>Scan the Built Image and Push it to Artifactory as a golden Image which can be deployed</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
@@ -9,6 +9,10 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.8">
+      <taskName>Scan and Certify</taskName>
+      <stageName>Scan</stageName>
+    </se.diabol.jenkins.pipeline.PipelineProperty>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -33,7 +37,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+          <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-app</fromImage>
         <tag>latest</tag>
@@ -44,7 +48,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+          <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-webapp</fromImage>
         <tag>latest</tag>

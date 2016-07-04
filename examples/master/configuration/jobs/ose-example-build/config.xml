@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description></description>
+  <description>Build Release Candidate Image and Push to Artificactory</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
@@ -17,6 +17,15 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.8">
+      <taskName>Build Docker Image</taskName>
+      <stageName>Build</stageName>
+    </se.diabol.jenkins.pipeline.PipelineProperty>
+    <hudson.plugins.promoted__builds.JobPropertyImpl plugin="promoted-builds@2.24.1">
+      <activeProcessNames>
+        <string>Verified</string>
+      </activeProcessNames>
+    </hudson.plugins.promoted__builds.JobPropertyImpl>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -33,7 +42,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <url>https://github-isl-01.ca.com/kalni03/ose-example.git</url>
-        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -54,12 +63,10 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.3">
-      <server plugin="docker-commons@1.4.0">
-        <uri>tcp://192.168.43.21:2376</uri>
-      </server>
+      <server plugin="docker-commons@1.4.0"/>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-app</repoName>
       <noCache>false</noCache>
@@ -75,12 +82,10 @@
       <forceTag>true</forceTag>
     </com.cloudbees.dockerpublish.DockerBuilder>
     <com.cloudbees.dockerpublish.DockerBuilder plugin="docker-build-publish@1.2.3">
-      <server plugin="docker-commons@1.4.0">
-        <uri>tcp://192.168.43.21:2376</uri>
-      </server>
+      <server plugin="docker-commons@1.4.0"/>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>75e596fc-fe4f-4164-85af-20ec87538f25</credentialsId>
+        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-webapp</repoName>
       <noCache>false</noCache>
