@@ -177,9 +177,9 @@
             "containers": [
               {
                 "name": "jenkins",
-                "image": " ",
+                "image": "jenkins-master:latest",
                 "readinessProbe": {
-                  "timeoutSeconds": 3,
+                  "timeoutSeconds": 60,
                   "initialDelaySeconds": 3,
                   "httpGet": {
                     "path": "/login",
