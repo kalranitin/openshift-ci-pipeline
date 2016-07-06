@@ -4,36 +4,15 @@
   <description>Deploy the application on OpenShift within Dev Project</description>
   <keepDependencies>false</keepDependencies>
   <properties>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>-1</daysToKeep>
-        <numToKeep>1</numToKeep>
-        <artifactDaysToKeep>-1</artifactDaysToKeep>
-        <artifactNumToKeep>-1</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
     <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
-    <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.8">
-      <ownership>
-        <ownershipEnabled>true</ownershipEnabled>
-        <primaryOwnerId>admin</primaryOwnerId>
-        <coownersIds class="sorted-set">
-          <string>nitin</string>
-        </coownersIds>
-      </ownership>
-    </com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty>
+    <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.8"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>true</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
     <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.11">
-      <taskName>Application Deploy</taskName>
-      <stageName>Deploy</stageName>
+      <taskName>Production Application Deploy</taskName>
+      <stageName>Deploy To Prod</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
-    <hudson.plugins.promoted__builds.JobPropertyImpl plugin="promoted-builds@2.24.1">
-      <activeProcessNames>
-        <string>Deploy To QA</string>
-      </activeProcessNames>
-    </hudson.plugins.promoted__builds.JobPropertyImpl>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -80,44 +59,70 @@
       <command>oc login https://ose3cluster.services.marvin.caplatformdev.com:8443 --insecure-skip-tls-verify=true -u nitin -p nitin
 docker login -u nitin -p `oc whoami -t` ose3vdr.services.marvin.caplatformdev.com:5000
 
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-app:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-webapp:latest
 
-docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-app:latest
+docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-webapp:latest
 
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest
-docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-app:latest
+docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp-prod/sample-webapp:latest
 </command>
     </hudson.tasks.Shell>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
+      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <namespace>sampelapp-prod</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <testTag>latest</testTag>
+      <prodTag>prod</prodTag>
+      <testStream>sample-app</testStream>
+      <prodStream>sample-app</prodStream>
+      <destinationNamespace>sampleapp-prod</destinationNamespace>
+      <destinationAuthToken></destinationAuthToken>
+      <alias>false</alias>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
       <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
-      <namespace>sampleapp</namespace>
+      <namespace>sampelapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-app-deployment</depCfg>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
       <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
-      <namespace>sampleapp</namespace>
+      <namespace>sampleapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-app-deployment</depCfg>
       <replicaCount>1</replicaCount>
       <verifyReplicaCount>false</verifyReplicaCount>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
+    <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
+      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <namespace>sampelapp-prod</namespace>
+      <authToken></authToken>
+      <verbose>false</verbose>
+      <testTag>latest</testTag>
+      <prodTag>prod</prodTag>
+      <testStream>sample-webapp</testStream>
+      <prodStream>sample-webapp</prodStream>
+      <destinationNamespace>sampleapp-prod</destinationNamespace>
+      <destinationAuthToken></destinationAuthToken>
+      <alias>false</alias>
+    </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
       <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
-      <namespace>sampleapp</namespace>
+      <namespace>sampleapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-webapp-deployment</depCfg>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
       <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
-      <namespace>sampleapp</namespace>
+      <namespace>sampleapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-webapp-deployment</depCfg>

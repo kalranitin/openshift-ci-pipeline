@@ -4,20 +4,21 @@
   <properties/>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>false</canRoam>
-  <disabled>true</disabled>
+  <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <conditions>
-    <hudson.plugins.promoted__builds.conditions.SelfPromotionCondition>
-      <evenIfUnstable>false</evenIfUnstable>
-    </hudson.plugins.promoted__builds.conditions.SelfPromotionCondition>
+    <hudson.plugins.promoted__builds.conditions.ManualCondition>
+      <users></users>
+      <parameterDefinitions/>
+    </hudson.plugins.promoted__builds.conditions.ManualCondition>
   </conditions>
-  <icon>star-green</icon>
+  <icon>star-gold</icon>
   <buildSteps>
     <hudson.tasks.BuildTrigger>
-      <childProjects>ose-example-scan-push</childProjects>
+      <childProjects>ose-example-deploy-prod</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

@@ -4,15 +4,28 @@
   <description>Scan the Built Image and Push it to Artifactory as a golden Image which can be deployed</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>1</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
     <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.8"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.8">
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.11">
       <taskName>Scan and Certify</taskName>
       <stageName>Scan</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
+    <hudson.plugins.promoted__builds.JobPropertyImpl plugin="promoted-builds@2.24.1">
+      <activeProcessNames>
+        <string>Deploy To Dev</string>
+      </activeProcessNames>
+    </hudson.plugins.promoted__builds.JobPropertyImpl>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
       <autoRebuild>false</autoRebuild>
       <rebuildDisabled>false</rebuildDisabled>
@@ -37,7 +50,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
+          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-app</fromImage>
         <tag>latest</tag>
@@ -48,7 +61,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
+          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-webapp</fromImage>
         <tag>latest</tag>
@@ -62,6 +75,74 @@
       <timeout>10</timeout>
       <logLevel>true</logLevel>
     </org.jenkinsci.plugins.twistlock.builder.BuildScanner>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.TagImageCommand">
+        <image>isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-app</image>
+        <repository>isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app</repository>
+        <tag>latest</tag>
+        <ignoreIfNotFound>false</ignoreIfNotFound>
+        <withForce>false</withForce>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.TagImageCommand">
+        <image>isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-webapp:latest</image>
+        <repository>isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp</repository>
+        <tag>latest</tag>
+        <ignoreIfNotFound>false</ignoreIfNotFound>
+        <withForce>false</withForce>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
+        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
+          <url>http://isl-dsdc.ca.com:5001</url>
+          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+        </dockerRegistryEndpoint>
+        <image>saas-devops/ose-example/sample-app</image>
+        <tag>latest</tag>
+        <registry>isl-dsdc.ca.com:5001</registry>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
+        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
+          <url>http://isl-dsdc.ca.com:5001</url>
+          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+        </dockerRegistryEndpoint>
+        <image>saas-devops/ose-example/sample-webapp</image>
+        <tag>latest</tag>
+        <registry>isl-dsdc.ca.com:5001</registry>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.RemoveImageCommand">
+        <imageName>isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest</imageName>
+        <imageId></imageId>
+        <ignoreIfNotFound>true</ignoreIfNotFound>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.RemoveImageCommand">
+        <imageName>isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-app:latest</imageName>
+        <imageId></imageId>
+        <ignoreIfNotFound>true</ignoreIfNotFound>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.RemoveImageCommand">
+        <imageName>isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest</imageName>
+        <imageId></imageId>
+        <ignoreIfNotFound>true</ignoreIfNotFound>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
+    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
+      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.RemoveImageCommand">
+        <imageName>isl-dsdc.ca.com:5000/saas-devops/ose-example/sample-webapp:latest</imageName>
+        <imageId></imageId>
+        <ignoreIfNotFound>true</ignoreIfNotFound>
+      </dockerCmd>
+    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
   </builders>
   <publishers>
     <org.jenkinsci.plugins.twistlock.publisher.Publisher plugin="twistlock-jenkins-plugin@1_4_45">

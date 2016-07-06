@@ -17,13 +17,13 @@
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>false</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.8">
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.11">
       <taskName>Build Docker Image</taskName>
       <stageName>Build</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
     <hudson.plugins.promoted__builds.JobPropertyImpl plugin="promoted-builds@2.24.1">
       <activeProcessNames>
-        <string>Verified</string>
+        <string>Image Build</string>
       </activeProcessNames>
     </hudson.plugins.promoted__builds.JobPropertyImpl>
     <com.sonyericsson.rebuild.RebuildSettings plugin="rebuild@1.25">
@@ -42,7 +42,7 @@
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
         <url>https://github-isl-01.ca.com/kalni03/ose-example.git</url>
-        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
+        <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
     <branches>
@@ -66,7 +66,7 @@
       <server plugin="docker-commons@1.4.0"/>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
+        <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-app</repoName>
       <noCache>false</noCache>
@@ -85,7 +85,7 @@
       <server plugin="docker-commons@1.4.0"/>
       <registry plugin="docker-commons@1.4.0">
         <url>http://isl-dsdc.ca.com:5000</url>
-        <credentialsId>1004a7d9-bb1b-4452-9fdd-d1155227e946</credentialsId>
+        <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
       </registry>
       <repoName>saas-devops/ose-example/sample-webapp</repoName>
       <noCache>false</noCache>
