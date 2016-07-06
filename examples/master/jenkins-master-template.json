@@ -43,11 +43,10 @@
       "description": "The git ref or tag to use for customization.",
       "value": "master"
     },
-    {
-      "name": "NAMESPACE",
-      "displayName": "Namespace",
-      "description": "The OpenShift Namespace where the ImageStream resides.",
-      "value": "openshift"
+	{
+      "name": "JENKINS_IMAGE",
+      "description": "Jenkins Docker image to use",
+      "value": "openshift/jenkins-1-centos7"
     }
   ],
   "objects": [
@@ -110,9 +109,8 @@
           "type": "Source",
           "sourceStrategy": {
             "from": {
-                "kind": "ImageStreamTag",
-                "name": "jenkins:latest",
-                "namespace": "${NAMESPACE}"
+                "kind": "DockerImage",
+                "name": "${JENKINS_IMAGE}"
             }
           }
         },
@@ -171,7 +169,7 @@
             "containers": [
               {
                 "name": "jenkins",
-                "image": "jenkins-master:latest",
+                "image": "jenkins-master",
                 "readinessProbe": {
                   "timeoutSeconds": 60,
                   "initialDelaySeconds": 3,
