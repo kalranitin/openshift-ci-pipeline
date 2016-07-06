@@ -65,7 +65,7 @@ jquery:1.7.2-1
 jquery-detached:1.2
 jquery-ui:1.0.2
 junit:1.10
-kubernetes:0.7
+kubernetes:0.6
 ldap:1.11
 mailer:1.16
 mapdb-api:1.0.6.0
