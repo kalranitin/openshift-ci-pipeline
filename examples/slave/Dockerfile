@@ -8,11 +8,11 @@ ENV OC_CLI_HOME /opt/ose-cli
 # Install headless Java
 USER root
 
-COPY docker.repo /etc/yum.repos.d/docker.repo
+# COPY docker.repo /etc/yum.repos.d/docker.repo
 
 RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release && \
     rpmkeys --import file:///etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7 && \
-    yum install -y --setopt=tsflags=nodocs install service wget nss_wrapper docker-engine && \
+    yum install -y --setopt=tsflags=nodocs install service wget nss_wrapper && \
     yum clean all && \
     mkdir -p /opt/app-root/jenkins && \
     chown -R 1001:0 /opt/app-root/jenkins && \
@@ -20,13 +20,14 @@ RUN yum install -y --setopt=tsflags=nodocs --enablerepo=centosplus epel-release 
 
 WORKDIR /tmp
 RUN mkdir -p ${OC_CLI_HOME} && wget --no-cookies --no-check-certificate --header "Cookie: gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie" "http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.rpm" && \
-	curl -fsSL https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz | tar -xzC ${OC_CLI_HOME} --strip-components=1
+	curl -fsSL https://github.com/openshift/origin/releases/download/v1.3.0-alpha.2/openshift-origin-client-tools-v1.3.0-alpha.2-983578e-linux-64bit.tar.gz | tar -xzC ${OC_CLI_HOME} --strip-components=1 && \
+	wget --no-cookies --no-check-certificate https://yum.dockerproject.org/repo/main/centos/7/Packages/docker-engine-1.10.3-1.el7.centos.x86_64.rpm
 
-RUN yum -y install /tmp/jdk-8u60-linux-x64.rpm && rm /tmp/jdk-8u60-linux-x64.rpm
+RUN yum -y install /tmp/jdk-8u60-linux-x64.rpm && rm /tmp/jdk-8u60-linux-x64.rpm && yum -y install docker-engine-1.10.3-1.el7.centos.x86_64.rpm
 RUN alternatives --install /usr/bin/java java ${java_home}/bin/java 1
 RUN alternatives --install /usr/bin/keytool keytool ${java_home}/bin/keytool 1
 RUN alternatives --install /usr/bin/javac javac ${java_home}/bin/javac 1
-RUN alternatives --install /usr/bin/javadoc javadoc ${java_home}/bin/javadoc 1
+# RUN alternatives --install /usr/bin/javadoc javadoc ${java_home}/bin/javadoc 1
 
 # Update /etc/profile
 ENV JAVA_HOME=${java_home}

@@ -91,9 +91,9 @@
         },
         "strategy": {
           "type": "Docker",
-		  "noCache": true,
-          "forcePull": true,
-          "dockerStrategy": {
+		  "dockerStrategy": {
+			"noCache": true,
+	        "forcePull": true,
             "from": {
               "kind": "DockerImage",
               "name": "${IMAGE_NAME}"
