@@ -1,6 +1,6 @@
 #!/bin/sh
 
 oc delete all --all -n ci
-oc delete all --all -n stage
+#oc delete all --all -n stage
 oc delete project ci
-oc delete project stage
+#oc delete project stage
