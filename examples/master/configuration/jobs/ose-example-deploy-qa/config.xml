@@ -47,7 +47,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
@@ -60,7 +60,7 @@
       <alias>false</alias>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
@@ -73,7 +73,7 @@
       <alias>false</alias>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp-qa</namespace>
       <authToken></authToken>
       <verbose>false</verbose>

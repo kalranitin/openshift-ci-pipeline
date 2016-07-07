@@ -77,30 +77,30 @@
       </dockerCmd>
     </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
     <hudson.tasks.Shell>
-      <command>oc login https://ose3cluster.services.marvin.caplatformdev.com:8443 --insecure-skip-tls-verify=true -u nitin -p nitin
-docker login -u nitin -p `oc whoami -t` ose3vdr.services.marvin.caplatformdev.com:5000
+      <command>oc login https://openshift.default.svc.cluster.local --insecure-skip-tls-verify=true -u nitin -p nitin
+docker login -u nitin -p `oc whoami -t` `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000
 
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-app:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-webapp:latest
 
-docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker push ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker push `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-app:latest
+docker push `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-webapp:latest
 
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest
-docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-app:latest
-docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webapp:latest
+docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-app:latest
+docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp/sample-webapp:latest
 </command>
     </hudson.tasks.Shell>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-app-deployment</depCfg>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
@@ -109,14 +109,14 @@ docker rmi ose3vdr.services.marvin.caplatformdev.com:5000/sampleapp/sample-webap
       <verifyReplicaCount>false</verifyReplicaCount>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <depCfg>sample-webapp-deployment</depCfg>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://ose3cluster.services.marvin.caplatformdev.com:8443</apiURL>
+      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
