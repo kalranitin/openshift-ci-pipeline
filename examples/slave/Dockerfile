@@ -25,6 +25,7 @@ RUN mkdir -p ${OC_CLI_HOME} && \
 	yum -y install /tmp/docker-engine-selinux-1.10.3-1.el7.centos.noarch.rpm && rm /tmp/docker-engine-selinux-1.10.3-1.el7.centos.noarch.rpm && \
 	yum -y install /tmp/docker-engine-1.10.3-1.el7.centos.x86_64.rpm && rm /tmp/docker-engine-1.10.3-1.el7.centos.x86_64.rpm
 	
+ENV PATH=${OC_CLI_HOME}:$PATH
 
 # Copy the entrypoint
 COPY contrib/openshift/* /opt/app-root/jenkins/
