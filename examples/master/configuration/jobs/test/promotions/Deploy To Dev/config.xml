@@ -12,15 +12,14 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <conditions>
-    <hudson.plugins.promoted__builds.conditions.ManualCondition>
-      <users></users>
-      <parameterDefinitions/>
-    </hudson.plugins.promoted__builds.conditions.ManualCondition>
+    <hudson.plugins.promoted__builds.conditions.SelfPromotionCondition>
+      <evenIfUnstable>false</evenIfUnstable>
+    </hudson.plugins.promoted__builds.conditions.SelfPromotionCondition>
   </conditions>
   <icon>star-gold</icon>
   <buildSteps>
     <hudson.tasks.BuildTrigger>
-      <childProjects>ose-example-deploy-prod</childProjects>
+      <childProjects>ose-example-deploy</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

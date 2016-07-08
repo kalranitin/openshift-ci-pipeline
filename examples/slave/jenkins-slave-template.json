@@ -18,14 +18,14 @@
       "name": "IMAGE_NAME",
       "displayName": "Image Name",
       "description": "The name of an image to convert.",
-      "value": "centos/ruby-22-centos7",
+      "value": "openshift/base-centos7",
       "required": true
     },
     {
       "name": "IMAGE_STREAM_NAME",
       "displayName": "ImageStream Name",
       "description": "The name of the imagestream to create for the newly built slave image.",
-      "value": "ruby-22-centos7",
+      "value": "jenkins-slave-oc-docker",
       "required": true
     },
     {

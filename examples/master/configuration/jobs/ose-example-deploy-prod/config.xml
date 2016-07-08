@@ -4,12 +4,19 @@
   <description>Deploy the application on OpenShift within Dev Project</description>
   <keepDependencies>false</keepDependencies>
   <properties>
+    <io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty plugin="openshift-sync@0.0.9">
+      <uid></uid>
+      <namespace></namespace>
+      <name></name>
+      <resourceVersion></resourceVersion>
+      <contextDir></contextDir>
+    </io.fabric8.jenkins.openshiftsync.BuildConfigProjectProperty>
     <hudson.plugins.disk__usage.DiskUsageProperty plugin="disk-usage@0.28"/>
     <com.synopsys.arc.jenkins.plugins.ownership.jobs.JobOwnerJobProperty plugin="ownership@0.8"/>
     <com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty plugin="naginator@1.16.1">
       <optOut>true</optOut>
     </com.chikli.hudson.plugin.naginator.NaginatorOptOutProperty>
-    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.11">
+    <se.diabol.jenkins.pipeline.PipelineProperty plugin="delivery-pipeline-plugin@0.9.8">
       <taskName>Production Application Deploy</taskName>
       <stageName>Deploy To Prod</stageName>
     </se.diabol.jenkins.pipeline.PipelineProperty>
@@ -25,7 +32,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>maven-339</assignedNode>
+  <assignedNode>jenkins-slave-oc-docker</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -33,47 +40,28 @@
   <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
-    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
-      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
-        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
-          <url>http://isl-dsdc.ca.com:5001</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
-        </dockerRegistryEndpoint>
-        <fromImage>saas-devops/ose-example/sample-app</fromImage>
-        <tag>latest</tag>
-        <registry>isl-dsdc.ca.com:5001</registry>
-      </dockerCmd>
-    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
-    <org.jenkinsci.plugins.dockerbuildstep.DockerBuilder plugin="docker-build-step@1.35">
-      <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
-        <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
-          <url>http://isl-dsdc.ca.com:5001</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
-        </dockerRegistryEndpoint>
-        <fromImage>saas-devops/ose-example/sample-webapp</fromImage>
-        <tag>latest</tag>
-        <registry>isl-dsdc.ca.com:5001</registry>
-      </dockerCmd>
-    </org.jenkinsci.plugins.dockerbuildstep.DockerBuilder>
     <hudson.tasks.Shell>
-      <command>oc login https://openshift.default.svc.cluster.local --insecure-skip-tls-verify=true -u nitin -p nitin
-docker login -u nitin -p `oc whoami -t` `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000
+      <command>docker pull isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest
+docker pull isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest
 
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-app:latest
-docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-webapp:latest
+oc login https://openshift.default.svc.cluster.local --insecure-skip-tls-verify=true -u nitin -p nitin
+docker login -u nitin -e nitin.kalra@ca.com -p `oc whoami -t` `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000
 
-docker push `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-app:latest
-docker push `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-webapp:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-app:latest
+docker tag isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-webapp:latest
+
+docker push `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-app:latest
+docker push `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-webapp:latest
 
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-app:latest
 docker rmi isl-dsdc.ca.com:5001/saas-devops/ose-example/sample-webapp:latest
-docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-app:latest
-docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'`:5000/sampleapp-prod/sample-webapp:latest
+docker rmi `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-app:latest
+docker rmi `oc get svc docker-registry -n default -o jsonpath=&apos;{.spec.portalIP}&apos;`:5000/sampleapp-prod/sample-webapp:latest
 </command>
     </hudson.tasks.Shell>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
       <apiURL>https://openshift.default.svc.cluster.local</apiURL>
-      <namespace>sampelapp-prod</namespace>
+      <namespace>sampleapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <testTag>latest</testTag>
@@ -84,13 +72,6 @@ docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'
       <destinationAuthToken></destinationAuthToken>
       <alias>false</alias>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
-    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
-      <namespace>sampelapp-prod</namespace>
-      <authToken></authToken>
-      <verbose>false</verbose>
-      <depCfg>sample-app-deployment</depCfg>
-    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
       <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp-prod</namespace>
@@ -102,7 +83,7 @@ docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'
     </com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger plugin="openshift-pipeline@1.0.17">
       <apiURL>https://openshift.default.svc.cluster.local</apiURL>
-      <namespace>sampelapp-prod</namespace>
+      <namespace>sampleapp-prod</namespace>
       <authToken></authToken>
       <verbose>false</verbose>
       <testTag>latest</testTag>
@@ -113,13 +94,6 @@ docker rmi `oc get svc docker-registry -n default -o jsonpath='{.spec.portalIP}'
       <destinationAuthToken></destinationAuthToken>
       <alias>false</alias>
     </com.openshift.jenkins.plugins.pipeline.OpenShiftImageTagger>
-    <com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer plugin="openshift-pipeline@1.0.17">
-      <apiURL>https://openshift.default.svc.cluster.local</apiURL>
-      <namespace>sampleapp-prod</namespace>
-      <authToken></authToken>
-      <verbose>false</verbose>
-      <depCfg>sample-webapp-deployment</depCfg>
-    </com.openshift.jenkins.plugins.pipeline.OpenShiftDeployer>
     <com.openshift.jenkins.plugins.pipeline.OpenShiftDeploymentVerifier plugin="openshift-pipeline@1.0.17">
       <apiURL>https://openshift.default.svc.cluster.local</apiURL>
       <namespace>sampleapp-prod</namespace>

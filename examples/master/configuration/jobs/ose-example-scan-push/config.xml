@@ -38,7 +38,7 @@
     </hudson.plugins.throttleconcurrents.ThrottleJobProperty>
   </properties>
   <scm class="hudson.scm.NullSCM"/>
-  <assignedNode>maven-339</assignedNode>
+  <assignedNode>jenkins-slave-oc-docker</assignedNode>
   <canRoam>false</canRoam>
   <disabled>false</disabled>
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
@@ -50,7 +50,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+          <credentialsId>nitin-ca-creds</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-app</fromImage>
         <tag>latest</tag>
@@ -61,7 +61,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PullImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5000</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+          <credentialsId>nitin-ca-creds</credentialsId>
         </dockerRegistryEndpoint>
         <fromImage>saas-devops/ose-example/sample-webapp</fromImage>
         <tag>latest</tag>
@@ -97,7 +97,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5001</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+          <credentialsId>nitin-ca-creds</credentialsId>
         </dockerRegistryEndpoint>
         <image>saas-devops/ose-example/sample-app</image>
         <tag>latest</tag>
@@ -108,7 +108,7 @@
       <dockerCmd class="org.jenkinsci.plugins.dockerbuildstep.cmd.PushImageCommand">
         <dockerRegistryEndpoint plugin="docker-commons@1.4.0">
           <url>http://isl-dsdc.ca.com:5001</url>
-          <credentialsId>6b434371-316c-4000-984a-541cf33b27db</credentialsId>
+          <credentialsId>nitin-ca-creds</credentialsId>
         </dockerRegistryEndpoint>
         <image>saas-devops/ose-example/sample-webapp</image>
         <tag>latest</tag>
