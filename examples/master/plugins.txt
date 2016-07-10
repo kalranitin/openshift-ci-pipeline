@@ -21,6 +21,7 @@ console-column-plugin:1.5
 console-tail:1.1
 copyartifact:1.37
 copy-to-slave:1.4.4
+credentials:2.1.4
 credentials-binding:1.6
 cron_column:1.4
 cvs:2.12
@@ -51,6 +52,7 @@ greenballs:1.15
 groovy:1.29
 groovy-postbuild:2.3
 instant-messaging:1.35
+icon-shim:2.0.3
 ircbot:2.26
 jackson2-api:2.5.4
 javadoc:1.3
